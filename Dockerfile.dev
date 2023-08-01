@@ -1,0 +1,17 @@
+# Ambiente de Desarrollo
+FROM node:18
+# Descargar las tecnologias necesarias para el ambiente
+RUN npm i -g nodemon
+# La carpeta donde se guardara nuestra app dentro del contenedor
+RUN mkdir -p /home/app
+# Indicamos a docker que estaremos trabajando en nuestra app indicando la ruta donde esta el codigo fuente.
+WORKDIR /home/app
+# Al trabajar con un "Volumen" el cual en este caso agregara un enlace simbolico en la ruta
+# /home/app con el codigo de la app, no será necesario copiar el codigo en la ruta.
+# COPY . /home/app
+
+EXPOSE 3000
+
+# Al indicarle a docker que estaremos trabajando en la ruta del codigo fuente no es
+# No es necesario colocar la ruta completa aqui.
+CMD ["nodemon", "-L", "index.js"]

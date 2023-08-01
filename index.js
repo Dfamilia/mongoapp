@@ -12,16 +12,24 @@ const Animal = mongoose.model(
 const app = express();
 
 mongoose.connect(
-  "mongodb://nico:password@localhost:27017/miapp?authSource=admin"
+  /* 
+  En esta URL pasan muchas cosas, como cuales:
+  
+  1- Tiene user(nico) y pass (password)
+  2- Indica a que maquina o contenedor debe conectarse con su puerto (localhost:27017)(monguito)
+  3- Indica el nombre de la BD que se utilizara (miapp)
+  4- Indica que accedera con una autorizacion de Admin (admin) 
+  */
+  "mongodb://nico:password@monguito:27017/miapp?authSource=admin"
 );
 
 app.get("/", async (_req, res) => {
-  console.log("listando... chanchitos...");
+  console.log("listando datos...");
   const animales = await Animal.find();
   return res.send(animales);
 });
 app.get("/crear", async (_req, res) => {
-  console.log("creando...");
+  console.log("creando data...");
   await Animal.create({ tipo: "Chanchito", estado: "Feliz" });
   return res.send("ok");
 });

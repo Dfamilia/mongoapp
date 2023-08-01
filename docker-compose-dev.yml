@@ -1,0 +1,30 @@
+# Ambiente de Desarrollo
+version: "3.9"
+services:
+  chanchito:
+    build:
+      # Indica al archivo "docker-compose" donde se encuentra la app o el contexto en el cual estara trabajando.
+      context: .
+      # Crear la imagen de "Chanchito" utilizando el archivo "Dockerfile.dev"
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    links:
+      - monguito
+    # Idicamos al contenedor de chanchito que utilize un "Volumen" que creara el enlace simbolico con el codigo fuente.
+    volumes:
+      # Utilizaremos volumen anonimos(optional)
+      # . -> ruta actual que debe ser montada
+      # : ruta destino donde se montara
+      - .:/home/app
+  monguito:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=nico
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:

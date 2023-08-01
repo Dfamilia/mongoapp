@@ -1,0 +1,45 @@
+# tener en cuenta la identacion que esta al mismo nivel y que esta dentro de ese nivel
+# version de compose
+version: "3.9"
+
+# agregar los contenedores a utilizar
+services:
+  # 1tab/contenedor del app
+  chanchito:
+    # En este Tab tengo que especificar:
+    # 1- Como se tiene que construir.
+    # 2- Los puertos a utilizar.
+    # 3- Los contenedores que se van a inter-conectar con este contenedor,
+    # Estos deben estar espeficicados dentro del archivo compose. eje Monguito
+    build: .
+    # . significa: Construye la imagen que se encuentra en el "Dockerfile" de esta ruta.
+    ports:
+      # Mapeo de puertos -(enumera), 1er -p(host), 2do -p(container) numero de puertos entre ""
+      - "3000:3000"
+    links:
+      # Indica los contenedores con los cuales me voy a inter-conectar para crear mi red
+      # Los nombres de los contenedores van sin ""
+      - monguito
+  # 1tab/contenedor de la DB
+  monguito:
+    image: mongo
+    # Basado en que imagen docker se creara el contenedor monguito
+    ports:
+      - "27017:27017"
+    environment:
+      # variables de entorno que utilizara el contenedor para su acceso desde mongoose
+      - MONGO_INITDB_ROOT_USERNAME=nico
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      # Indicas la ruta dentro del contenedor en donde va hacer montado el volumen de "mongo-data".
+      # Docker se encargara de crear la carpeta del lado "Host" y hacer la referencia.
+      # En este caso mongo guarda sus datos en la ruta de ejemplo.
+      - mongo-data:/data/db
+      # mysql -> /var/lib/mysql
+      # postgres -> /var/lib/postgresql/data
+volumes:
+  # Solo define el volumen, primero se debe definir el volumen para que pueda ser usado
+  # En los contenedores de arriba
+  # Salvar la data del lado del "Host" para que sea permanente entre contenedores
+  mongo-data:
+  # Nombre de la carpeta de data permanente del lado "Host".
